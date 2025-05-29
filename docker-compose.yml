@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - "6374:6379"
+
+  bot:
+    build: ./bot
+    container_name: bot
+    volumes:
+      - ./media:/app/media
+    env_file:
+      - .env
+    depends_on:
+      - redis
+
+  processor:
+    build: ./processor
+    container_name: processor
+    volumes:
+      - ./media:/app/media
+    env_file:
+      - .env
+    depends_on:
+      - redis
